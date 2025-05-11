@@ -1,7 +1,7 @@
 # scraper.py (version simplifiée côté Streamlit qui appelle l'API)
 import requests
 
-API_URL = "https://melee-scraper-api.onrender.com/scrape"  # Remplace par l'URL de ton API FastAPI
+API_URL = "https://melee-scraper-api-1.onrender.com/scrape"  # Remplace par l'URL de ton API FastAPI
 
 def scrape_tournament_data(url):
     response = requests.get(API_URL, params={"url": url})
