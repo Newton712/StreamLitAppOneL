@@ -1,4 +1,7 @@
 # scraper.py
+
+
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -6,21 +9,24 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime, timedelta
 from supabase import create_client
+import chromedriver_autoinstaller
 
 SUPABASE_URL = "https://zxlumrmkuuighyfxzshg.supabase.co"
 SUPABASE_KEY = "yeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4bHVtcm1rdXVpZ2h5Znh6c2hnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0Njk3MzU2NiwiZXhwIjoyMDYyNTQ5NTY2fQ.ANiwlR7Sm7EhrHgP0SvIUrYQdLHYuP-WF4jyHB06Te0"
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+
 def start_browser():
+    chromedriver_autoinstaller.install()  # ✅ Installe la bonne version de chromedriver
+
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
-    options.binary_location = "/usr/bin/chromium"  # ✅ le bon chemin sous Debian/Render
+    options.binary_location = "/usr/bin/chromium"
 
-    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
+    return webdriver.Chrome(options=options)
 
 def scrape_tournament_data(url):
     driver = start_browser()
