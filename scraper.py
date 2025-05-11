@@ -8,8 +8,8 @@ from datetime import datetime, timedelta
 from supabase import create_client
 import chromedriver_autoinstaller
 
-SUPABASE_URL = "https://zxlumrmkuuighyfxzshg.supabase.co"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4bHVtcm1rdXVpZ2h5Znh6c2hnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0Njk3MzU2NiwiZXhwIjoyMDYyNTQ5NTY2fQ.ANiwlR7Sm7EhrHgP0SvIUrYQdLHYuP-WF4jyHB06Te0"
+SUPABASE_URL = "https://your-project.supabase.co"
+SUPABASE_KEY = "your-service-role-key"
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def start_browser():
@@ -74,3 +74,44 @@ def scrape_tournament_data(url):
 
     driver.quit()
     return tournament, players, tables
+
+def import_last_pairing(url, tournament_id):
+    driver = start_browser()
+    driver.get(url)
+    WebDriverWait(driver, 15).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, "#pairings tbody tr"))
+    )
+
+    rows = driver.find_elements(By.CSS_SELECTOR, "#pairings tbody tr")
+    new_pairings = []
+
+    for row in rows:
+        try:
+            table_num = row.find_element(By.CSS_SELECTOR, "td.TableNumber-column").text.strip()
+            ps = row.find_elements(By.CSS_SELECTOR, 'a[data-type="player"]')
+            p1 = ps[0].get_attribute("innerHTML").split("<svg")[0].strip()
+            p2 = ps[1].get_attribute("innerHTML").split("<svg")[0].strip()
+
+            p1data = supabase.table("players").select("*").eq("name", p1).eq("tournament_id", tournament_id).execute().data
+            p2data = supabase.table("players").select("*").eq("name", p2).eq("tournament_id", tournament_id).execute().data
+
+            a1, a2 = (p1data[0]["Deckcolor1"], p1data[0]["Deckcolor2"]) if p1data else (None, None)
+            b1, b2 = (p2data[0]["Deckcolor1"], p2data[0]["Deckcolor2"]) if p2data else (None, None)
+
+            new_pairings.append({
+                "tournament_id": tournament_id,
+                "round": "Nouvelle Ronde",
+                "tableNum": table_num,
+                "player_1": p1,
+                "player_2": p2,
+                "DeckcolorA1": a1,
+                "DeckcolorA2": a2,
+                "DeckcolorB1": b1,
+                "DeckcolorB2": b2
+            })
+        except:
+            continue
+
+    driver.quit()
+    if new_pairings:
+        supabase.table("pairings").insert(new_pairings).execute()
