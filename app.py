@@ -20,7 +20,12 @@ if st.button("Lancer Recherche"):
         st.success("✅ Tournoi déjà existant.")
     else:
         with st.spinner("Scraping et importation via API..."):
-            tournament, players, tables = scrape_tournament_data(url)
+            try:
+                tournament, players, tables = scrape_tournament_data(url)
+            except Exception as e:
+                st.error(f"❌ Erreur d'import : {e}")
+                st.stop()
+
             supabase.table("tournaments").insert(tournament).execute()
             supabase.table("players").insert(
                 [{"name": name, "tournament_id": tournament["tournament_id"]} for name in players]
