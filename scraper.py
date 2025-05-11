@@ -28,9 +28,10 @@ def scrape_tournament_data(url):
     driver = start_browser()
     driver.get(url)
 
-    WebDriverWait(driver, 15).until(
-        EC.presence_of_element_located((By.ID, "tournament-id"))
-    )
+    # Attendre les éléments requis
+    wait.until(EC.presence_of_element_located((By.ID, "tournament-id")))
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h3.mb-1")))
+    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "span[data-toggle='datetime']")))
 
     tournament_id = driver.find_element(By.ID, "tournament-id").get_attribute("value").strip()
     tournament_name = driver.find_element(By.CSS_SELECTOR, "h3.mb-1").text.strip()
