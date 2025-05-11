@@ -29,8 +29,14 @@ def start_browser():
     return webdriver.Chrome(options=options)
 
 def scrape_tournament_data(url):
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+
     driver = start_browser()
     driver.get(url)
+    WebDriverWait(driver, 10).until(
+    EC.presence_of_element_located((By.ID, "tournament-id"))
+    )
 
     tournament_id = driver.find_element(By.ID, "tournament-id").get_attribute("value").strip()
     tournament_name = driver.find_element(By.CSS_SELECTOR, "h3.mb-1").text.strip()
