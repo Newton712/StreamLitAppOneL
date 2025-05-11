@@ -3,8 +3,8 @@ import streamlit as st
 from supabase import create_client
 from scraper import scrape_tournament_data, import_last_pairing
 
-SUPABASE_URL = st.secrets["SUPABASE_URL"]
-SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+SUPABASE_URL = st.secrets["https://zxlumrmkuuighyfxzshg.supabase.co"]
+SUPABASE_KEY = st.secrets["SeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4bHVtcm1rdXVpZ2h5Znh6c2hnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0Njk3MzU2NiwiZXhwIjoyMDYyNTQ5NTY2fQ.ANiwlR7Sm7EhrHgP0SvIUrYQdLHYuP-WF4jyHB06Te0"]
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 st.set_page_config(page_title="Import Tournoi Melee.gg")
