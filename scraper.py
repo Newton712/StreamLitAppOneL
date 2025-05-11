@@ -8,8 +8,8 @@ from datetime import datetime, timedelta
 from supabase import create_client
 import chromedriver_autoinstaller
 
-SUPABASE_URL = "https://your-project.supabase.co"
-SUPABASE_KEY = "your-service-role-key"
+SUPABASE_URL = "https://zxlumrmkuuighyfxzshg.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4bHVtcm1rdXVpZ2h5Znh6c2hnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0Njk3MzU2NiwiZXhwIjoyMDYyNTQ5NTY2fQ.ANiwlR7Sm7EhrHgP0SvIUrYQdLHYuP-WF4jyHB06Te0"
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def start_browser():
