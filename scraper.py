@@ -1,0 +1,1 @@
+# Contenu complet de scraper.py ici (raccourci pour éviter duplication dans l'exemple)
